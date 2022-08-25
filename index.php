@@ -13,6 +13,16 @@ if($FORCE_HTTPS){
         exit();
     }
 }
+
+$error = false;
+if (isset($_POST['password'])) {
+    if ($USER_PASSWORD == $_POST['password']) {
+        setcookie("login", "user", time() + 60 * 60 * 24 * 3650);
+        header('Location: /');
+    } else {
+        $error = true;
+    }
+}
 ?>
 
 <!DOCTYPE html>
