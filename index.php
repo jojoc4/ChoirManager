@@ -17,7 +17,11 @@ if($FORCE_HTTPS){
 $error = false;
 if (isset($_POST['password'])) {
     if ($USER_PASSWORD == $_POST['password']) {
-        setcookie("login", "user", time() + 60 * 60 * 24 * 3650);
+        setcookie("login", password_hash($USER_PASSWORD, PASSWORD_DEFAULT), time() + 60 * 60 * 24 * 3650);
+        header('Location: /');
+    } elseif($ADMIN_PASSWORD == $_POST['password']){
+        setcookie("login", password_hash($USER_PASSWORD, PASSWORD_DEFAULT), time() + 60 * 60 * 24 * 3650);
+        setcookie("admin", password_hash($ADMIN_PASSWORD, PASSWORD_DEFAULT), time() + 60 * 60 * 24 * 3650);
         header('Location: /');
     } else {
         $error = true;
@@ -72,6 +76,13 @@ if (isset($_POST['password'])) {
                     </ul>
                     <hr class="sidebar-divider my-0">
                     <ul class="navbar-nav text-light" id="accordionSidebar">
+                        <?php
+                        if (isset($_COOKIE['admin']) && password_verify($ADMIN_PASSWORD, $_COOKIE['admin'])) {
+                            ?>
+                            <li class="nav-item"><a class="nav-link" href="/admin/"><i class="fas fa-toolbox"></i><span>Administration</span></a></li>
+                            <?php
+                        }
+                        ?>
                         <li class="nav-item"><a class="nav-link" href="https://host-free.ch/cloud/index.php/s/AHsKqXGr9xWBgsN"><i class="fas fa-file-upload"></i><span>Déposer un fichier</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout.php"><i class="fas fa-lock"></i><span>Se déconnecter</span></a></li>
                     </ul>
@@ -91,7 +102,7 @@ if (isset($_POST['password'])) {
                         </div>
                     </nav>
                     <?php
-                    if (!isset($_COOKIE['login'])) {
+                    if (!isset($_COOKIE['login']) || !password_verify($USER_PASSWORD, $_COOKIE['login'])) {
                         include 'login.php';
                     } else {
                         if (!isset($_GET['p'])) {
