@@ -1,14 +1,3 @@
-<?php
-$error = false;
-if (isset($_POST['password'])) {
-    if ($USER_PASSWORD == $_POST['password']) {
-        setcookie("login", "user", time() + 60 * 60 * 24 * 3650);
-        header('Location: /');
-    } else {
-        $error = true;
-    }
-}
-?>
 <div class="container-fluid overflow-visible">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
