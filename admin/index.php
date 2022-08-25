@@ -64,9 +64,10 @@ if (!isset($_COOKIE['admin']) || !password_verify($ADMIN_PASSWORD, $_COOKIE['adm
                         </div>
                     </nav>
                     <?php
-                    /*if (!isset($_GET['p'])) {
+                    if (!isset($_GET['p'])) {
                         include 'home.php';
                     } else {
+                        /*
                         switch ($_GET['p']) {
                             case 'd':
                                 include 'date.php';
@@ -78,7 +79,8 @@ if (!isset($_COOKIE['admin']) || !password_verify($ADMIN_PASSWORD, $_COOKIE['adm
                                 include 'error.php';
                                 break;
                         }
-                    }*/
+                        */
+                    }
                     ?>
                 </div>
                 <footer class="bg-white sticky-footer">
