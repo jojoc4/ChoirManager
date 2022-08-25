@@ -67,7 +67,6 @@ if (!isset($_COOKIE['admin']) || !password_verify($ADMIN_PASSWORD, $_COOKIE['adm
                     if (!isset($_GET['p'])) {
                         include 'home.php';
                     } else {
-                        /*
                         switch ($_GET['p']) {
                             case 'd':
                                 include 'date.php';
@@ -75,11 +74,13 @@ if (!isset($_COOKIE['admin']) || !password_verify($ADMIN_PASSWORD, $_COOKIE['adm
                             case 'f':
                                 include 'folder.php';
                                 break;
+                            case 'm':
+                                include 'music.php';
+                                break;
                             default :
-                                include 'error.php';
+                                include '../error.php';
                                 break;
                         }
-                        */
                     }
                     ?>
                 </div>
