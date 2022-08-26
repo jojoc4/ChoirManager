@@ -45,7 +45,7 @@ if (!isset($_COOKIE['admin']) || !password_verify($ADMIN_PASSWORD, $_COOKIE['adm
                     <div class="sidebar-brand-icon" style="margin-top:8px;"><img width="64px" src="../assets/img/index_logo.png"></div><br>
                     <hr class="sidebar-divider my-0">
                     <ul class="navbar-nav text-light" id="accordionSidebar">
-                        <li class="nav-item"><a class="nav-link <?php if (!isset($_GET['p'])) echo "active"; ?>" href=""><i class="fas fa-home"></i><span>Accueil</span></a></li>
+                        <li class="nav-item"><a class="nav-link <?php if (!isset($_GET['p'])) echo "active"; ?>" href="/admin/"><i class="fas fa-home"></i><span>Accueil</span></a></li>
                         <li class="nav-item"><a class="nav-link <?php if (isset($_GET['p']) && $_GET['p'] == 'd') echo "active"; ?>" href="?p=d"><i class="fas fa-calendar"></i><span>Dates</span></a></li>
                         <li class="nav-item"><a class="nav-link <?php if (isset($_GET['p']) && $_GET['p'] == 'f') echo "active"; ?>" href="?p=f"><i class="fas fa-folder"></i><span>Dossiers</span></a></li>
                         <li class="nav-item"><a class="nav-link <?php if (isset($_GET['p']) && $_GET['p'] == 'm') echo "active"; ?>" href="?p=m"><i class="fas fa-music"></i><span>Chants</span></a></li>
