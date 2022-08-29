@@ -22,11 +22,9 @@ services:
             MYSQL_DATABASE: 'choirmanager'
         volumes:
             - mysqldata:/var/lib/mysql
-        ports:
-            - 3306:3306
     adminer:
-        image: adminer:latest  
-        ports: 
+        image: adminer:latest
+        ports:
             - 8081:8080
 volumes:
     mysqldata: {}
