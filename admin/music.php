@@ -18,6 +18,12 @@ if(isset($_GET['a'])){
             unset($_GET['a']);
             break;
         case 'd':
+            $versions = $pdo->query("SELECT * FROM version WHERE `id_music` = '".$_GET['id']."' ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
+            $music = $pdo->query("SELECT * FROM music WHERE `id_music` = '".$_GET['id']."'")->fetch(PDO::FETCH_ASSOC);
+            foreach($versions as $version){
+                unlink("../files/".$version['url']);
+            }
+            rmdir("../files/". $music['directory']);
             $pdo->exec("DELETE FROM `version` WHERE ((`id_music` = '".$_GET['id']."'));");
             $pdo->exec("DELETE FROM `music` WHERE ((`id_music` = '".$_GET['id']."'));");
             unset($_GET['a']);
@@ -29,18 +35,24 @@ if(isset($_GET['a'])){
             $pdo->exec("UPDATE `version` SET `name` = '".addslashes($_GET['name'])."', `number` = '".$_GET['number']."' WHERE `id_version` = '".$_GET['id_version']."';");
             break;
         case 'vd':
+            $version = $pdo->query("SELECT * FROM version WHERE `id_version` = '".$_GET['id_version']."' ")->fetch(PDO::FETCH_ASSOC);
+            unlink("../files/".$version['url']);
             $pdo->exec("DELETE FROM `version` WHERE ((`id_version` = '".$_GET['id_version']."'));");
             break;
         case 'av':
             $music = $pdo->query("SELECT * FROM music WHERE `id_music` = '".$_GET['id']."'")->fetch(PDO::FETCH_ASSOC);
             $target= "../files/". $music['directory'] . "/" . $_POST['name'] . ".mp3";
-            if(!is_dir("../files/".$music['directory'])){
-                mkdir("../files/".$music['directory']);
-            }
-            if(move_uploaded_file($_FILES["version"]["tmp_name"], $target)){
-                $pdo->exec("INSERT INTO `version` (`name`, `id_music`, `url`, `number`) VALUES ('".addslashes($_POST['name'])."', '".$_GET['id']."', '".$music['directory'] . "/" . $_POST['name'] . ".mp3"."', '".$_POST['number']."');");
+            if (file_exists($target)) {
+                echo "File allready exsists";
             }else{
-                echo "Error";
+                if(!is_dir("../files/".$music['directory'])){
+                    mkdir("../files/".$music['directory']);
+                }
+                if(move_uploaded_file($_FILES["version"]["tmp_name"], $target)){
+                    $pdo->exec("INSERT INTO `version` (`name`, `id_music`, `url`, `number`) VALUES ('".addslashes($_POST['name'])."', '".$_GET['id']."', '".$music['directory'] . "/" . $_POST['name'] . ".mp3"."', '".$_POST['number']."');");
+                }else{
+                    echo "Error";
+                }
             }
             break;
     }    
