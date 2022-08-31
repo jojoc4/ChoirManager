@@ -23,8 +23,13 @@ if(isset($_GET['a'])){
             foreach($versions as $version){
                 unlink("../files/".$version['url']);
             }
+            $documents = $pdo->query("SELECT * FROM document WHERE `id_music` = '".$_GET['id']."'")->fetchAll(PDO::FETCH_ASSOC);
+            foreach($documents as $document){
+                unlink("../files/".$document['url']);
+            }
             rmdir("../files/". $music['directory']);
             $pdo->exec("DELETE FROM `version` WHERE ((`id_music` = '".$_GET['id']."'));");
+            $pdo->exec("DELETE FROM `document` WHERE ((`id_music` = '".$_GET['id']."'));");
             $pdo->exec("DELETE FROM `music` WHERE ((`id_music` = '".$_GET['id']."'));");
             unset($_GET['a']);
             break;
@@ -50,6 +55,30 @@ if(isset($_GET['a'])){
                 }
                 if(move_uploaded_file($_FILES["version"]["tmp_name"], $target)){
                     $pdo->exec("INSERT INTO `version` (`name`, `id_music`, `url`, `number`) VALUES ('".addslashes($_POST['name'])."', '".$_GET['id']."', '".$music['directory'] . "/" . $_POST['name'] . ".mp3"."', '".$_POST['number']."');");
+                }else{
+                    echo "Error";
+                }
+            }
+            break;
+        case 'de':
+            $pdo->exec("UPDATE `document` SET `name` = '".addslashes($_GET['name'])."' WHERE `id_doc` = '".$_GET['id_doc']."';");
+            break;
+        case 'dd':
+            $document = $pdo->query("SELECT * FROM document WHERE `id_doc` = '".$_GET['id_doc']."' ")->fetch(PDO::FETCH_ASSOC);
+            unlink("../files/".$document['url']);
+            $pdo->exec("DELETE FROM `document` WHERE ((`id_doc` = '".$_GET['id_doc']."'));");
+            break;
+        case 'ad':
+            $music = $pdo->query("SELECT * FROM music WHERE `id_music` = '".$_GET['id']."'")->fetch(PDO::FETCH_ASSOC);
+            $target= "../files/". $music['directory'] . "/" . $_POST['name'] . ".pdf";
+            if (file_exists($target)) {
+                echo "File allready exsists";
+            }else{
+                if(!is_dir("../files/".$music['directory'])){
+                    mkdir("../files/".$music['directory']);
+                }
+                if(move_uploaded_file($_FILES["document"]["tmp_name"], $target)){
+                    $pdo->exec("INSERT INTO `document` (`name`, `id_music`, `url`) VALUES ('".addslashes($_POST['name'])."', '".$_GET['id']."', '".$music['directory'] . "/" . $_POST['name'] . ".pdf"."');");
                 }else{
                     echo "Error";
                 }
@@ -123,7 +152,28 @@ if(isset($_GET['a'])){
                 <h4>Documents</h4>
             </div>
             <div class="card-body">
-                
+            <?php
+                foreach ($documents as $document) {
+                    ?>
+                    <form method="get" class="form-inline">
+                    <input type="hidden" value="m" name="p">
+                    <input type="hidden" value="de" name="a">
+                    <input type="hidden" value="<?php echo $_GET['id'] ?>" name="id">
+                    <input type="hidden" value="<?php echo $document['id_doc'] ?>" name="id_doc">
+                    <input type="text" required class="form-control" style="width: auto; display: inline;" name="name" value="<?php echo $document['name'] ?>" placeholder="Nom">
+                    <input type="submit" class="btn btn-primary" value="Éditer">
+                    
+                    <a href="?p=m&a=dd&id=<?php echo $_GET['id'] ?>&id_doc=<?php echo $document['id_doc'] ?>" class="btn btn-warning">Supprimer</a>
+                    </form>
+                <?php
+                }
+                ?>
+                <hr>
+                <form method="post" enctype="multipart/form-data" class="form-inline" action="/admin/?p=m&a=ad&id=<?php echo $_GET['id'] ?>">
+                    <input type="text" required class="form-control" style="width: auto; display: inline;" name="name" value="Partition" placeholder="Nom">
+                    <input type="file" required class="form-control" style="width: auto; display: inline;" name="document" placeholder="Fichier">
+                    <input type="submit" class="btn btn-primary" value="Ajouter">
+                </form>
             </div>
         </div>
         <?php
