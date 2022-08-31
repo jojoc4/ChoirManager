@@ -18,11 +18,30 @@ if(isset($_GET['a'])){
             unset($_GET['a']);
             break;
         case 'd':
+            $pdo->exec("DELETE FROM `version` WHERE ((`id_music` = '".$_GET['id']."'));");
             $pdo->exec("DELETE FROM `music` WHERE ((`id_music` = '".$_GET['id']."'));");
             unset($_GET['a']);
             break;
         case 'ed':
             $pdo->exec("UPDATE `music` SET `directory` = '".$_GET['directory']."' WHERE `id_music` = '".$_GET['id']."';");
+            break;
+        case 've':
+            $pdo->exec("UPDATE `version` SET `name` = '".addslashes($_GET['name'])."', `number` = '".$_GET['number']."' WHERE `id_version` = '".$_GET['id_version']."';");
+            break;
+        case 'vd':
+            $pdo->exec("DELETE FROM `version` WHERE ((`id_version` = '".$_GET['id_version']."'));");
+            break;
+        case 'av':
+            $music = $pdo->query("SELECT * FROM music WHERE `id_music` = '".$_GET['id']."'")->fetch(PDO::FETCH_ASSOC);
+            $target= "../files/". $music['directory'] . "/" . $_POST['name'] . ".mp3";
+            if(!is_dir("../files/".$music['directory'])){
+                mkdir("../files/".$music['directory']);
+            }
+            if(move_uploaded_file($_FILES["version"]["tmp_name"], $target)){
+                $pdo->exec("INSERT INTO `version` (`name`, `id_music`, `url`, `number`) VALUES ('".addslashes($_POST['name'])."', '".$_GET['id']."', '".$music['directory'] . "/" . $_POST['name'] . ".mp3"."', '".$_POST['number']."');");
+            }else{
+                echo "Error";
+            }
             break;
     }    
 }
@@ -73,11 +92,18 @@ if(isset($_GET['a'])){
                     <audio controls style="width: auto; display: inline; padding: .375rem .75rem;">
                         <source src="/files/<?php echo $version['url'] ?>" type="audio/mpeg">
                     </audio>
-                    <a href="?p=m&a=vd&id=<?php echo $version['id_version'] ?>" class="btn btn-warning">Supprimer</a>
+                    <a href="?p=m&a=vd&id=<?php echo $_GET['id'] ?>&id_version=<?php echo $version['id_version'] ?>" class="btn btn-warning">Supprimer</a>
                     </form>
                 <?php
                 }
                 ?>
+                <hr>
+                <form method="post" enctype="multipart/form-data" class="form-inline" action="/admin/?p=m&a=av&id=<?php echo $_GET['id'] ?>">
+                    <input type="text" required class="form-control" style="width: auto; display: inline;" name="name" placeholder="Nom">
+                    <input type="number" required class="form-control" style="width: auto; display: inline;" name="number" value="<?php echo sizeof($versions)+1 ?>" placeholder="Ordre">
+                    <input type="file" required class="form-control" style="width: auto; display: inline;" name="version" placeholder="Fichier">
+                    <input type="submit" class="btn btn-primary" value="Ajouter">
+                </form>
             </div>
         </div>
         <div class="card shadow mb-4">
