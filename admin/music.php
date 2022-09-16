@@ -1,15 +1,16 @@
 <?php
-function folder_name($name){
-    $name=strtolower($name);
-    $name[0]=strtoupper($name[0]);
-    $name = str_replace(" ", "_", $name);
-    return $name;
-}
-
 if(isset($_GET['a'])){
     switch($_GET['a']){
         case 'a':
-            $pdo->exec("INSERT INTO `music` (`name`, `directory`) VALUES ('".addslashes($_GET['name'])."', '".folder_name($_GET['name'])."');");
+            $name = folder_name($_GET['name']);
+            if(is_dir("../files/".$name)){
+                $v=2;
+                while(is_dir("../files/".$name.$v)){
+                    $v++;
+                }
+                $name.=$v;
+            }
+            $pdo->exec("INSERT INTO `music` (`name`, `directory`) VALUES ('".addslashes($_GET['name'])."', '".$name."');");
             $_GET['a']= 'm';
             $_GET['id'] = $pdo->lastInsertId();
             break;
@@ -27,7 +28,9 @@ if(isset($_GET['a'])){
             foreach($documents as $document){
                 unlink("../files/".$document['url']);
             }
-            rmdir("../files/". $music['directory']);
+            if(is_dir("../files/". $music['directory'])){
+                rmdir("../files/". $music['directory']);
+            }
             $pdo->exec("DELETE FROM `version` WHERE ((`id_music` = '".$_GET['id']."'));");
             $pdo->exec("DELETE FROM `document` WHERE ((`id_music` = '".$_GET['id']."'));");
             $pdo->exec("DELETE FROM `music` WHERE ((`id_music` = '".$_GET['id']."'));");

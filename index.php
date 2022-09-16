@@ -1,5 +1,11 @@
 <?php
+require 'updater/tools.php';
 require 'config.php';
+
+if(needsUpdate($pdo, $VERSION)){
+    echo "L'application nécessite une mise à jour, veuillez contacter l'administrateur.";
+    return;
+}
 
 //https redirection
 if($FORCE_HTTPS){

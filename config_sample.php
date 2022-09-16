@@ -14,7 +14,11 @@ try {
     echo 'Connexion échouée : ' . $e->getMessage();
 }
 
-$config = $pdo->query("SELECT * FROM config")->fetchAll(PDO::FETCH_ASSOC);
-$USER_PASSWORD=$config[0]['value'];
-$ADMIN_PASSWORD=$config[1]['value'];
-$FORCE_HTTPS=$config[2]['value'] == "false" ? false : true;
+$VERSION = 1;
+if(!needsUpdate($pdo, $VERSION)){
+    $config = $pdo->query("SELECT * FROM config")->fetchAll(PDO::FETCH_ASSOC);
+
+    $USER_PASSWORD=$config[0]['value'];
+    $ADMIN_PASSWORD=$config[1]['value'];
+    $FORCE_HTTPS=$config[2]['value'] == "false" ? false : true;
+}
