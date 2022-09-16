@@ -83,7 +83,7 @@ if (isset($_POST['password'])) {
                             <?php
                         }
                         ?>
-                        <li class="nav-item"><a class="nav-link" href="https://host-free.ch/cloud/index.php/s/AHsKqXGr9xWBgsN"><i class="fas fa-file-upload"></i><span>Déposer un fichier</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="https://cloud.host-free.ch/index.php/s/HnrDt4P9BLYCGCy"><i class="fas fa-file-upload"></i><span>Déposer un fichier</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout.php"><i class="fas fa-lock"></i><span>Se déconnecter</span></a></li>
                     </ul>
                     <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
