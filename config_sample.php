@@ -14,7 +14,7 @@ try {
     echo 'Connexion échouée : ' . $e->getMessage();
 }
 
-$VERSION = 1;
+$VERSION = 2;
 if(!needsUpdate($pdo, $VERSION)){
     $config = $pdo->query("SELECT * FROM config")->fetchAll(PDO::FETCH_ASSOC);
 

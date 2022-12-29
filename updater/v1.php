@@ -1,8 +1,8 @@
 <?php
-echo "Updating DB";
+echo "Updating DB<br>";
 $pdo->exec(file_get_contents('v1.sql'));
 
-echo "Updating file structure";
+echo "Updating file structure<br>";
 //create folders
 $musics = $pdo->query("SELECT * FROM music")->fetchAll(PDO::FETCH_ASSOC);
 foreach($musics as $music){
