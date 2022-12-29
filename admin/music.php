@@ -41,6 +41,31 @@ if(isset($_GET['a'])){
             break;
         case 've':
             $pdo->exec("UPDATE `version` SET `name` = '".addslashes($_GET['name'])."', `number` = '".$_GET['number']."' WHERE `id_version` = '".$_GET['id_version']."';");
+            if(isset($_GET["soprano"])){
+                $pdo->exec("UPDATE `version` SET `soprano` = '1' WHERE `id_version` = ". $_GET['id_version']);
+            }else{
+                $pdo->exec("UPDATE `version` SET `soprano` = '0' WHERE `id_version` = ". $_GET['id_version']);
+            }
+            if(isset($_GET["alto"])){
+                $pdo->exec("UPDATE `version` SET `alto` = '1' WHERE `id_version` = ". $_GET['id_version']);
+            }else{
+                $pdo->exec("UPDATE `version` SET `alto` = '0' WHERE `id_version` = ". $_GET['id_version']);
+            }
+            if(isset($_GET["tenor"])){
+                $pdo->exec("UPDATE `version` SET `tenor` = '1' WHERE `id_version` = ". $_GET['id_version']);
+            }else{
+                $pdo->exec("UPDATE `version` SET `tenor` = '0' WHERE `id_version` = ". $_GET['id_version']);
+            }
+            if(isset($_GET["basse"])){
+                $pdo->exec("UPDATE `version` SET `basse` = '1' WHERE `id_version` = ". $_GET['id_version']);
+            }else{
+                $pdo->exec("UPDATE `version` SET `basse` = '0' WHERE `id_version` = ". $_GET['id_version']);
+            }
+            if(isset($_GET["tutti"])){
+                $pdo->exec("UPDATE `version` SET `tutti` = '1' WHERE `id_version` = ". $_GET['id_version']);
+            }else{
+                $pdo->exec("UPDATE `version` SET `tutti` = '0' WHERE `id_version` = ". $_GET['id_version']);
+            }
             break;
         case 'vd':
             $version = $pdo->query("SELECT * FROM version WHERE `id_version` = '".$_GET['id_version']."' ")->fetch(PDO::FETCH_ASSOC);
@@ -58,6 +83,22 @@ if(isset($_GET['a'])){
                 }
                 if(move_uploaded_file($_FILES["version"]["tmp_name"], $target)){
                     $pdo->exec("INSERT INTO `version` (`name`, `id_music`, `url`, `number`) VALUES ('".addslashes($_POST['name'])."', '".$_GET['id']."', '".$music['directory'] . "/" . $_POST['name'] . ".mp3"."', '".$_POST['number']."');");
+                    $id = $pdo->lastInsertId();
+                    if(str_contains($_POST["name"], "SOPRANO")){
+                        $pdo->exec("UPDATE `version` SET `soprano` = '1' WHERE `id_version` = ". $id);
+                    }
+                    if(str_contains($_POST["name"], "ALTO")){
+                        $pdo->exec("UPDATE `version` SET `alto` = '1' WHERE `id_version` = ". $id);
+                    }
+                    if(str_contains($_POST["name"], "TENOR")){
+                        $pdo->exec("UPDATE `version` SET `tenor` = '1' WHERE `id_version` = ". $id);
+                    }
+                    if(str_contains($_POST["name"], "BASSE")){
+                        $pdo->exec("UPDATE `version` SET `basse` = '1' WHERE `id_version` = ". $id);
+                    }
+                    if(str_contains($_POST["name"], "TUTTI")){
+                        $pdo->exec("UPDATE `version` SET `tutti` = '1' WHERE `id_version` = ". $id);
+                    }
                 }else{
                     echo "Error";
                 }
@@ -132,6 +173,26 @@ if(isset($_GET['a'])){
                     <input type="hidden" value="<?php echo $version['id_version'] ?>" name="id_version">
                     <input type="text" required class="form-control" style="width: auto; display: inline;" name="name" value="<?php echo $version['name'] ?>" placeholder="Nom">
                     <input type="number" required class="form-control" style="width: auto; display: inline;" name="number" value="<?php echo $version['number'] ?>" placeholder="Ordre">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="soprano" name="soprano" <?php echo $version['soprano'] == 1 ? "checked" : "" ?>>
+                        <label class="form-check-label" for="soprano">Soprano</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="alto" name="alto" <?php echo $version['alto'] == 1 ? "checked" : "" ?>>
+                        <label class="form-check-label" for="alto">Alto</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="tenor" name="tenor" <?php echo $version['tenor'] == 1 ? "checked" : "" ?>>
+                        <label class="form-check-label" for="tenor">Tenor</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="basse" name="basse" <?php echo $version['basse'] == 1 ? "checked" : "" ?>>
+                        <label class="form-check-label" for="basse">Basse</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="tutti" name="tutti" <?php echo $version['tutti'] == 1 ? "checked" : "" ?>>
+                        <label class="form-check-label" for="tutti">Tutti</label>
+                    </div>
                     <input type="submit" class="btn btn-primary" value="Éditer">
                     <audio controls style="width: auto; display: inline; padding: .375rem .75rem;">
                         <source src="/files/<?php echo $version['url'] ?>" type="audio/mpeg">
