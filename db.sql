@@ -17,7 +17,8 @@ CREATE TABLE `config` (
 INSERT INTO `config` (`id_cfg`, `name`, `value`) VALUES
 (1,	'USER_PASSWORD',	'userpass'),
 (2,	'ADMIN_PASSWORD',	'adminpass'),
-(3,	'FORCE_HTTPS',	'false');
+(3,	'FORCE_HTTPS',	'false'),
+(4,	'VERSION',	'1');
 
 CREATE TABLE `date` (
   `id_date` int(10) unsigned NOT NULL AUTO_INCREMENT,
