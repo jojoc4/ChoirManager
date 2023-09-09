@@ -8,12 +8,17 @@ $folder = $pdo->query("SELECT * FROM `folder` WHERE id_fld = " . $_GET['f'])->fe
     </div>
     <div class="row">
         <div class="col-lg-12 mb-4">
-            <?php
-            echo $folder['header'];
-            ?>
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                <h6 class="text-primary fw-bold m-0" style="border-color: rgb(178,21,30);border-top-color: rgb(78,;border-right-color: 115,;border-bottom-color: 223);border-left-color: 115,;color: rgb(178,21,30);"  data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i style="color:#888;" class="fa fa-caret-down fa-lg"></i> Tout lire</h6>
+                    <h4><?php echo $folder['header_title']; ?></h4>
+                </div>
+                <div class="card-body">
+                    <?php echo $folder['header']; ?><br><br>
+                </div>
+            </div>
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0" style="border-color: rgb(178,21,30);border-top-color: rgb(78,;border-right-color: 115,;border-bottom-color: 223);border-left-color: 115,;color: rgb(178,21,30);" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i style="color:#888;" class="fa fa-caret-down fa-lg"></i> Tout lire</h6>
                 </div>
                 <div class="card-body collapse" id="collapseExample">
                     <div class="row m-2" style="margin: 0px;">
@@ -113,205 +118,209 @@ $folder = $pdo->query("SELECT * FROM `folder` WHERE id_fld = " . $_GET['f'])->fe
     </div>
 </div>
 <script>
-(function () {            
-    var playlists = [ 
-        [
-            <?php
-            $musics = $pdo->query("SELECT * FROM `folder_music` NATURAL JOIN music WHERE id_fld = " . $_GET['f'] . " ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($musics as $music) {
-                $versions = $pdo->query("SELECT * FROM version WHERE soprano=1 AND id_music=" . $music['id_music'] . " ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($versions as $version) {
-                    echo "{name:\"" . $music['name'] . "\", url:\"/files/" . $version['url'] . "\"},\n";
+    (function() {
+        var playlists = [
+            [
+                <?php
+                $musics = $pdo->query("SELECT * FROM `folder_music` NATURAL JOIN music WHERE id_fld = " . $_GET['f'] . " ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($musics as $music) {
+                    $versions = $pdo->query("SELECT * FROM version WHERE soprano=1 AND id_music=" . $music['id_music'] . " ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($versions as $version) {
+                        echo "{name:\"" . $music['name'] . "\", url:\"/files/" . $version['url'] . "\"},\n";
+                    }
                 }
-            }
-            ?>
-        ],[
-            <?php
-            $musics = $pdo->query("SELECT * FROM `folder_music` NATURAL JOIN music WHERE id_fld = " . $_GET['f'] . " ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($musics as $music) {
-                $versions = $pdo->query("SELECT * FROM version WHERE alto=1 AND id_music=" . $music['id_music'] . " ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($versions as $version) {
-                    echo "{name:\"" . $music['name'] . "\", url:\"/files/" . $version['url'] . "\"},\n";
+                ?>
+            ],
+            [
+                <?php
+                $musics = $pdo->query("SELECT * FROM `folder_music` NATURAL JOIN music WHERE id_fld = " . $_GET['f'] . " ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($musics as $music) {
+                    $versions = $pdo->query("SELECT * FROM version WHERE alto=1 AND id_music=" . $music['id_music'] . " ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($versions as $version) {
+                        echo "{name:\"" . $music['name'] . "\", url:\"/files/" . $version['url'] . "\"},\n";
+                    }
                 }
-            }
-            ?>
-        ],[
-            <?php
-            $musics = $pdo->query("SELECT * FROM `folder_music` NATURAL JOIN music WHERE id_fld = " . $_GET['f'] . " ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($musics as $music) {
-                $versions = $pdo->query("SELECT * FROM version WHERE tenor=1 AND id_music=" . $music['id_music'] . " ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($versions as $version) {
-                    echo "{name:\"" . $music['name'] . "\", url:\"/files/" . $version['url'] . "\"},\n";
+                ?>
+            ],
+            [
+                <?php
+                $musics = $pdo->query("SELECT * FROM `folder_music` NATURAL JOIN music WHERE id_fld = " . $_GET['f'] . " ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($musics as $music) {
+                    $versions = $pdo->query("SELECT * FROM version WHERE tenor=1 AND id_music=" . $music['id_music'] . " ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($versions as $version) {
+                        echo "{name:\"" . $music['name'] . "\", url:\"/files/" . $version['url'] . "\"},\n";
+                    }
                 }
-            }
-            ?>
-        ],[
-            <?php
-            $musics = $pdo->query("SELECT * FROM `folder_music` NATURAL JOIN music WHERE id_fld = " . $_GET['f'] . " ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($musics as $music) {
-                $versions = $pdo->query("SELECT * FROM version WHERE basse=1 AND id_music=" . $music['id_music'] . " ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($versions as $version) {
-                    echo "{name:\"" . $music['name'] . "\", url:\"/files/" . $version['url'] . "\"},\n";
+                ?>
+            ],
+            [
+                <?php
+                $musics = $pdo->query("SELECT * FROM `folder_music` NATURAL JOIN music WHERE id_fld = " . $_GET['f'] . " ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($musics as $music) {
+                    $versions = $pdo->query("SELECT * FROM version WHERE basse=1 AND id_music=" . $music['id_music'] . " ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($versions as $version) {
+                        echo "{name:\"" . $music['name'] . "\", url:\"/files/" . $version['url'] . "\"},\n";
+                    }
                 }
-            }
-            ?>
-        ],[
-            <?php
-            $musics = $pdo->query("SELECT * FROM `folder_music` NATURAL JOIN music WHERE id_fld = " . $_GET['f'] . " ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($musics as $music) {
-                $versions = $pdo->query("SELECT * FROM version WHERE tutti=1 AND id_music=" . $music['id_music'] . " ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($versions as $version) {
-                    echo "{name:\"" . $music['name'] . "\", url:\"/files/" . $version['url'] . "\"},\n";
+                ?>
+            ],
+            [
+                <?php
+                $musics = $pdo->query("SELECT * FROM `folder_music` NATURAL JOIN music WHERE id_fld = " . $_GET['f'] . " ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($musics as $music) {
+                    $versions = $pdo->query("SELECT * FROM version WHERE tutti=1 AND id_music=" . $music['id_music'] . " ORDER BY number")->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($versions as $version) {
+                        echo "{name:\"" . $music['name'] . "\", url:\"/files/" . $version['url'] . "\"},\n";
+                    }
                 }
-            }
-            ?>
-        ]
-    ];
-    var trackTime = function(seconds) {
-        var min = 0;
-        var sec = Math.floor(seconds);
-        var time = 0;
-        min = Math.floor(sec / 60);
-        min = min >= 10 ? min : '0' + min;
-        sec = Math.floor(sec % 60);
-        sec = sec >= 10 ? sec : '0' + sec;
-        time = min + ':' + sec;
+                ?>
+            ]
+        ];
+        var trackTime = function(seconds) {
+            var min = 0;
+            var sec = Math.floor(seconds);
+            var time = 0;
+            min = Math.floor(sec / 60);
+            min = min >= 10 ? min : '0' + min;
+            sec = Math.floor(sec % 60);
+            sec = sec >= 10 ? sec : '0' + sec;
+            time = min + ':' + sec;
 
-        return time;
-  };
+            return time;
+        };
 
-    var player = document.getElementById('playlistplayer');
-    var prev = document.getElementById('playlistprev');
-    var next = document.getElementById('playlistnext');
-    var play = document.getElementById('playlistplay');
-    var now = document.getElementById('playlistnow');
-    var curent = document.getElementById('current-time');
-    var duration = document.getElementById('duration');
-    var playlistButoon = document.getElementsByClassName('plist');
-    var songId = null;
-    var playlist = null;
-    var playing=false;
+        var player = document.getElementById('playlistplayer');
+        var prev = document.getElementById('playlistprev');
+        var next = document.getElementById('playlistnext');
+        var play = document.getElementById('playlistplay');
+        var now = document.getElementById('playlistnow');
+        var curent = document.getElementById('current-time');
+        var duration = document.getElementById('duration');
+        var playlistButoon = document.getElementsByClassName('plist');
+        var songId = null;
+        var playlist = null;
+        var playing = false;
 
-    play.disabled=true;
-    prev.disabled=true;
-    next.disabled=true;
-    now.innerHTML = "Aucune voix sélectionnée";
-    curent.innerHTML = "00:00";
-    duration.innerHTML = "00:00";
-
-    player.addEventListener("error", function(e) {
-        switch (e.target.error.code) {
-            case e.target.error.MEDIA_ERR_ABORTED:
-            alert('You aborted the playback.');
-            break;
-            case e.target.error.MEDIA_ERR_NETWORK:
-            alert('A network error caused the audio download to fail.');
-            break;
-            case e.target.error.MEDIA_ERR_DECODE:
-            alert('The audio playback was aborted due to a corruption problem or because the video used features your browser did not support.');
-            break;
-            case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
-            alert('The audio not be loaded, either because the server or network failed or because the format is not supported.');
-            break;
-            default:
-            alert('An unknown error occurred.');
-            break;
-        }
-        songId = null;
-        playlist = null;
-        play.disabled=true;
-        prev.disabled=true;
-        next.disabled=true;
+        play.disabled = true;
+        prev.disabled = true;
+        next.disabled = true;
         now.innerHTML = "Aucune voix sélectionnée";
-        curent = "00:00";
-        duration = "00:00";
-    }, false);
+        curent.innerHTML = "00:00";
+        duration.innerHTML = "00:00";
 
-    player.addEventListener("play", function(e) {
-        playing=true;
-        play.innerHTML = '<i class="fa fa-pause-circle fa-lg"></i>';
-    }, false);
-
-    player.addEventListener("pause", function(e) {
-        playing=false;
-        play.innerHTML = '<i class="fa fa-play-circle fa-lg"></i>';
-    }, false);
-
-    player.addEventListener("ended", function(e) {
-        songId++;
-        if (songId < playlists[playlist].length) {
-            now.innerHTML = playlists[playlist][songId].name;
-            player.src = playlists[playlist][songId].url;
-            player.load();
-            player.play();
-            prev.disabled=false;
-            if(songId == playlists[playlist].length-1) {
-                next.disabled=true;
+        player.addEventListener("error", function(e) {
+            switch (e.target.error.code) {
+                case e.target.error.MEDIA_ERR_ABORTED:
+                    alert('You aborted the playback.');
+                    break;
+                case e.target.error.MEDIA_ERR_NETWORK:
+                    alert('A network error caused the audio download to fail.');
+                    break;
+                case e.target.error.MEDIA_ERR_DECODE:
+                    alert('The audio playback was aborted due to a corruption problem or because the video used features your browser did not support.');
+                    break;
+                case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                    alert('The audio not be loaded, either because the server or network failed or because the format is not supported.');
+                    break;
+                default:
+                    alert('An unknown error occurred.');
+                    break;
             }
-        } else {
             songId = null;
             playlist = null;
-            play.disabled=true;
-            prev.disabled=true;
-            next.disabled=true;
+            play.disabled = true;
+            prev.disabled = true;
+            next.disabled = true;
             now.innerHTML = "Aucune voix sélectionnée";
             curent = "00:00";
             duration = "00:00";
-        }
-    }, false);
-
-    player.addEventListener("timeupdate", function(e) {
-        curent.innerHTML = trackTime(player.currentTime);
-        duration.innerHTML = trackTime(player.duration);
-    }, false);
-
-    prev.addEventListener("click", function(e) {
-        if (songId > 0) {
-            songId--;
-            now.innerHTML = playlists[playlist][songId].name;
-            player.src = playlists[playlist][songId].url;
-            player.load();
-            player.play();
-            next.disabled=false;
-            if(songId == 0) {
-                prev.disabled=true;
-            }
-        }
-    }, false);
-
-    next.addEventListener("click", function(e) {
-        if (songId < playlists[playlist].length-1) {
-            songId++;
-            now.innerHTML = playlists[playlist][songId].name;
-            player.src = playlists[playlist][songId].url;
-            player.load();
-            player.play();
-            prev.disabled=false;
-            if(songId == playlists[playlist].length-1) {
-                next.disabled=true;
-            }
-        }
-    }, false);
-
-    play.addEventListener("click", function(e) {
-        if (playing) {
-            player.pause();
-        } else {
-            player.play();
-        }
-    }, false);
-
-    for(var i=0; i<playlistButoon.length; i++) {
-        playlistButoon[i].addEventListener("click", function(e) {
-            playlist = this.getAttribute("p");
-            songId = 0;
-            play.disabled=false;
-            next.disabled=false;
-            now.innerHTML = playlists[playlist][songId].name;
-            player.src = playlists[playlist][songId].url;
-            player.load();
-            player.play();
         }, false);
-    }
-})();
+
+        player.addEventListener("play", function(e) {
+            playing = true;
+            play.innerHTML = '<i class="fa fa-pause-circle fa-lg"></i>';
+        }, false);
+
+        player.addEventListener("pause", function(e) {
+            playing = false;
+            play.innerHTML = '<i class="fa fa-play-circle fa-lg"></i>';
+        }, false);
+
+        player.addEventListener("ended", function(e) {
+            songId++;
+            if (songId < playlists[playlist].length) {
+                now.innerHTML = playlists[playlist][songId].name;
+                player.src = playlists[playlist][songId].url;
+                player.load();
+                player.play();
+                prev.disabled = false;
+                if (songId == playlists[playlist].length - 1) {
+                    next.disabled = true;
+                }
+            } else {
+                songId = null;
+                playlist = null;
+                play.disabled = true;
+                prev.disabled = true;
+                next.disabled = true;
+                now.innerHTML = "Aucune voix sélectionnée";
+                curent = "00:00";
+                duration = "00:00";
+            }
+        }, false);
+
+        player.addEventListener("timeupdate", function(e) {
+            curent.innerHTML = trackTime(player.currentTime);
+            duration.innerHTML = trackTime(player.duration);
+        }, false);
+
+        prev.addEventListener("click", function(e) {
+            if (songId > 0) {
+                songId--;
+                now.innerHTML = playlists[playlist][songId].name;
+                player.src = playlists[playlist][songId].url;
+                player.load();
+                player.play();
+                next.disabled = false;
+                if (songId == 0) {
+                    prev.disabled = true;
+                }
+            }
+        }, false);
+
+        next.addEventListener("click", function(e) {
+            if (songId < playlists[playlist].length - 1) {
+                songId++;
+                now.innerHTML = playlists[playlist][songId].name;
+                player.src = playlists[playlist][songId].url;
+                player.load();
+                player.play();
+                prev.disabled = false;
+                if (songId == playlists[playlist].length - 1) {
+                    next.disabled = true;
+                }
+            }
+        }, false);
+
+        play.addEventListener("click", function(e) {
+            if (playing) {
+                player.pause();
+            } else {
+                player.play();
+            }
+        }, false);
+
+        for (var i = 0; i < playlistButoon.length; i++) {
+            playlistButoon[i].addEventListener("click", function(e) {
+                playlist = this.getAttribute("p");
+                songId = 0;
+                play.disabled = false;
+                next.disabled = false;
+                now.innerHTML = playlists[playlist][songId].name;
+                player.src = playlists[playlist][songId].url;
+                player.load();
+                player.play();
+            }, false);
+        }
+    })();
 </script>
